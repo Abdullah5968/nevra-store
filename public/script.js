@@ -1,32 +1,42 @@
-// This tells the browser to look for the button named "glow-button"
-const exploreButton = document.querySelector('.glow-button');
+// 1. Explore Button Logic (Banner wala button)
+const exploreButton = document.querySelector('.shop-now'); // Button class change ki hai as per new HTML
+if(exploreButton) {
+    exploreButton.addEventListener('click', function() {
+        window.scrollTo({
+            top: 600,
+            behavior: 'smooth'
+        });
+    });
+}
 
-// This tells the button what to do when someone clicks it!
-exploreButton.addEventListener('click', function() {
-    alert("Welcome to the Future! The Nevra collection is loading...");
-});
-// 1. We find the empty box on our website
-const shopContainer = document.getElementById('shop-container');
+// 2. We find the empty grid on our website
+const productList = document.getElementById('product-list');
 
-// 2. We send the waiter to the warehouse to get the clothes!
+// 3. We fetch products from our MongoDB via Vercel API
 fetch('/api/products')
     .then(function(response) {
-        return response.json(); // Translate the messy data
+        return response.json(); 
     })
     .then(function(clothes) {
-        // 3. For every piece of clothing in the warehouse, build a card!
+        // Clear the container first
+        productList.innerHTML = '';
+
+        // 4. For every piece of clothing, build a professional card!
         clothes.forEach(function(item) {
             
-            // This is creating the HTML skeleton automatically!
+            // Yahan humne click event dala hai jo product.html pe le jayega ID ke saath
             const card = `
-                <div class="product-card">
+                <div class="product-card" onclick="window.location.href='product.html?id=${item._id}'" style="cursor:pointer;">
                     <img src="${item.image}" alt="${item.name}">
-                    <h3>${item.name}</h3>
-                    <p class="price">${item.price}</p>
+                    <div class="product-info">
+                        <h3>${item.name}</h3>
+                        <span class="price">${item.price}</span>
+                        <button class="btn-buy">View Details</button>
+                    </div>
                 </div>
             `;
             
-            // Put the finished card inside the empty box on the screen
-            shopContainer.innerHTML += card;
+            productList.innerHTML += card;
         });
-    });
+    })
+    .catch(err => console.error("Error loading products:", err));

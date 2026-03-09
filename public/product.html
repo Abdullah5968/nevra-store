@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nevra | Product Details</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .details-container { display: flex; padding: 50px 10%; gap: 50px; flex-wrap: wrap; }
+        .details-image img { width: 100%; max-width: 500px; border-radius: 15px; border: 1px solid #333; }
+        .details-info { flex: 1; min-width: 300px; }
+        .details-info h1 { font-size: 40px; margin-bottom: 10px; }
+        .details-price { font-size: 28px; color: #ff0055; font-weight: 700; margin-bottom: 20px; }
+        .details-desc { color: #ccc; line-height: 1.6; margin-bottom: 30px; }
+        .quantity-input { background: #222; border: 1px solid #333; color: white; padding: 10px; width: 60px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <header><h1 class="logo">NEVRA<span>.</span></h1></header>
+
+    <div class="details-container" id="product-details">
+        </div>
+
+    <script>
+        async function loadProductDetails() {
+            // URL se product ID nikalna
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            const res = await fetch('/api/products');
+            const products = await res.json();
+            const product = products.find(p => p._id === productId);
+
+            if (product) {
+                document.getElementById('product-details').innerHTML = `
+                    <div class="details-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="details-info">
+                        <h1>${product.name}</h1>
+                        <p class="details-price">${product.price}</p>
+                        <p class="details-desc">Premium quality streetwear from Nevra's 2026 Collection. Crafted for comfort and designed for the bold.</p>
+                        <label>Quantity:</label><br>
+                        <input type="number" value="1" min="1" class="quantity-input"><br>
+                        <button class="shop-now" style="width: 100%;">ADD TO CART</button>
+                    </div>
+                `;
+            }
+        }
+        loadProductDetails();
+    </script>
+</body>
+</html>
