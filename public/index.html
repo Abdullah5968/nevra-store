@@ -12,12 +12,16 @@
     <header>
         <div class="nav-container">
             <h1 class="logo">NEVRA<span>.</span></h1>
-            <nav>
+            <nav id="nav-links">
                 <a href="index.html">Home</a>
                 <a href="#">Shop</a>
-                <a href="/login.html" class="auth-btn">Login</a>
-                <a href="/signup.html" class="auth-btn">Sign Up</a>
-                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+                <span id="auth-section">
+                    <a href="login.html" class="auth-btn">Login</a>
+                    <a href="signup.html" class="auth-btn">Sign Up</a>
+                </span>
+                <div class="cart-icon" style="cursor: pointer;" onclick="window.location.href='cart.html'">
+                    🛒 <span id="cart-count">0</span>
+                </div>
             </nav>
         </div>
     </header>
@@ -32,8 +36,7 @@
 
     <main>
         <h2 class="section-title">NEW ARRIVALS</h2>
-        <div id="product-list" class="product-grid">
-            </div>
+        <div id="product-list" class="product-grid"></div>
     </main>
 
     <footer>
@@ -52,5 +55,24 @@
     </footer>
 
     <script src="script.js"></script>
+    
+    <script>
+        // Check if user is logged in
+        const currentUser = localStorage.getItem('currentUser');
+        const authSection = document.getElementById('auth-section');
+
+        if (currentUser) {
+            // Agar login hai, to user ka naam aur Logout dikhao
+            authSection.innerHTML = `
+                <span style="color: #ff0055; font-weight: bold; margin-left: 20px;">Hi, ${currentUser}</span>
+                <a href="#" onclick="logout()" style="margin-left: 10px; font-size: 12px; color: #666;">Logout</a>
+            `;
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            location.reload();
+        }
+    </script>
 </body>
 </html>

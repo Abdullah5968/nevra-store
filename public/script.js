@@ -1,32 +1,37 @@
-// 1. Explore Button Logic (Banner wala button)
-const exploreButton = document.querySelector('.shop-now'); // Button class change ki hai as per new HTML
-if(exploreButton) {
-    exploreButton.addEventListener('click', function() {
+// 1. Scroll to Shop logic
+const shopNowBtn = document.querySelector('.shop-now');
+if(shopNowBtn) {
+    shopNowBtn.addEventListener('click', () => {
         window.scrollTo({
-            top: 600,
+            top: 800, 
             behavior: 'smooth'
         });
     });
 }
 
-// 2. We find the empty grid on our website
-const productList = document.getElementById('product-list');
+// 2. Fetch and Display Products
+async function loadProducts() {
+    // Hamare naye HTML mein ID 'product-list' hai
+    const productGrid = document.getElementById('product-list');
+    
+    if (!productGrid) return; // Agar page pe grid nahi hai to ruk jao
 
-// 3. We fetch products from our MongoDB via Vercel API
-fetch('/api/products')
-    .then(function(response) {
-        return response.json(); 
-    })
-    .then(function(clothes) {
-        // Clear the container first
-        productList.innerHTML = '';
+    try {
+        const response = await fetch('/api/products');
+        const clothes = await response.json();
 
-        // 4. For every piece of clothing, build a professional card!
-        clothes.forEach(function(item) {
-            
-            // Yahan humne click event dala hai jo product.html pe le jayega ID ke saath
+        // Pehle box ko khaali karo
+        productGrid.innerHTML = '';
+
+        if (clothes.length === 0) {
+            productGrid.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>No products found. Add some from Admin Panel!</p>";
+            return;
+        }
+
+        clothes.forEach(item => {
+            // Shopify style card with Click to View Details
             const card = `
-                <div class="product-card" onclick="window.location.href='product.html?id=${item._id}'" style="cursor:pointer;">
+                <div class="product-card" onclick="window.location.href='product.html?id=${item._id}'">
                     <img src="${item.image}" alt="${item.name}">
                     <div class="product-info">
                         <h3>${item.name}</h3>
@@ -35,8 +40,13 @@ fetch('/api/products')
                     </div>
                 </div>
             `;
-            
-            productList.innerHTML += card;
+            productGrid.innerHTML += card;
         });
-    })
-    .catch(err => console.error("Error loading products:", err));
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        productGrid.innerHTML = "<p style='color:red; grid-column: 1/-1; text-align:center;'>Database connection error!</p>";
+    }
+}
+
+// Page load hote hi products dikhao
+loadProducts();
