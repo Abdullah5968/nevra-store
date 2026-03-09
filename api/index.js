@@ -1,77 +1,65 @@
 const express = require('express');
-const mongoose = require('mongoose'); // Humari nayi database machine
+const mongoose = require('mongoose');
 const app = express();
-const PORT = 3000;
 
-app.use(express.static('public'));
 app.use(express.json());
 
-// --- DATABASE CONNECTION ---
-// Yahan apni copied line paste karein aur <db_password> ki jagah apna password likhein
-const dbURI = 'mongodb+srv://abdullah:nevra123@cluster0.n5whkis.mongodb.net/?appName=Cluster0';
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log("DB Connected"))
+    .catch(err => console.log(err));
 
-mongoose.connect(dbURI)
-    .then(() => console.log("CONNECTED TO MONGODB CLOUD!"))
-    .catch((err) => console.log("DB Connection Error:", err));
-
-// --- PRODUCT SCHEMA (Warehouse ka Naksha) ---
-const productSchema = new mongoose.Schema({
-    name: String,
-    price: String,
-    image: String
-});
-
+const productSchema = new mongoose.Schema({ name: String, price: String, image: String });
 const Product = mongoose.model('Product', productSchema);
 
-// --- API ROUTES ---
-
-// 1. Get all products from Database
-app.get('/api/products', async (req, response) => {
-    const products = await Product.find();
-    response.json(products);
-});
-
-// 2. Add new product to Database
-app.post('/api/products', async (req, response) => {
-    const newProduct = new Product(req.body);
-    await newProduct.save();
-    response.json({ message: "Product saved to Cloud!" });
-});
-// --- USER SCHEMA (Naya!) ---
-const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
-});
+const userSchema = new mongoose.Schema({ username: String, email: String, password: { type: String, required: true } });
 const User = mongoose.model('User', userSchema);
 
-// --- AUTH ROUTES ---
-
-// 1. Signup Route
-app.post('/api/signup', async (req, response) => {
-    try {
-        const newUser = new User(req.body);
-        await newUser.save();
-        response.json({ message: "Account Created Successfully!" });
-    } catch (err) {
-        response.status(400).json({ error: "Email or Username already exists!" });
-    }
-});
-
-// 2. Login Route
-app.post('/api/login', async (req, response) => {
-    try {
-        const user = await User.findOne({ email: req.body.email, password: req.body.password });
-        if (user) {
-            response.json({ message: "Login Successful!", user: user.username });
-        } else {
-            response.status(401).json({ error: "Invalid Credentials!" });
+// Auto-populate 50 products if empty
+const seedDB = async () => {
+    const count = await Product.countDocuments();
+    if (count === 0) {
+        let samples = [];
+        for (let i = 1; i <= 50; i++) {
+            samples.push({
+                name: `Nevra Edition Vol. ${i}`,
+                price: `Rs. ${2000 + (i * 100)}`,
+                image: `https://picsum.photos/seed/${i + 50}/500/700`
+            });
         }
-    } catch (err) {
-        response.status(500).json({ error: err.message });
+        await Product.insertMany(samples);
     }
+};
+seedDB();
+
+// Routes
+app.get('/api/products', async (req, res) => {
+    const products = await Product.find();
+    res.json(products);
 });
 
-app.listen(PORT, () => {
-    console.log("Server running on port 3000");
+app.post('/api/products', async (req, res) => {
+    const p = new Product(req.body);
+    await p.save();
+    res.json(p);
 });
+
+app.delete('/api/products/:id', async (req, res) => {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ msg: "Deleted" });
+});
+
+app.post('/api/signup', async (req, res) => {
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.json({ msg: "Success" });
+    } catch (e) { res.status(400).json({ error: "Error" }); }
+});
+
+app.post('/api/login', async (req, res) => {
+    const user = await User.findOne({ email: req.body.email, password: req.body.password });
+    if (user) res.json({ user: user.username });
+    else res.status(401).json({ error: "Failed" });
+});
+
+module.exports = app;
