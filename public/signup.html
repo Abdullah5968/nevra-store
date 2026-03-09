@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nevra | Create Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="display: flex; align-items: center; justify-content: center; height: 100vh;">
+    <div class="form-box" style="width: 400px; padding: 40px;">
+        <h2 style="text-align: center; color: #ff0055;">JOIN NEVRA</h2>
+        <p style="text-align: center; font-size: 12px; margin-bottom: 20px;">Enter your details to shop with us.</p>
+        <input type="text" id="sUser" placeholder="Username">
+        <input type="email" id="sEmail" placeholder="Email Address">
+        <input type="password" id="sPass" placeholder="Password">
+        <button onclick="signup()" class="shop-now" style="width: 100%;">Create Account</button>
+        <p style="text-align: center; margin-top: 15px; font-size: 14px;">Already have an account? <a href="login.html" style="color: #ff0055;">Login</a></p>
+    </div>
+
+    <script>
+        async function signup() {
+            const userData = {
+                username: document.getElementById('sUser').value,
+                email: document.getElementById('sEmail').value,
+                password: document.getElementById('sPass').value
+            };
+            const res = await fetch('/api/signup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(userData)
+            });
+            const data = await res.json();
+            if(data.message) {
+                alert(data.message);
+                window.location.href = "login.html";
+            } else {
+                alert(data.error);
+            }
+        }
+    </script>
+</body>
+</html>

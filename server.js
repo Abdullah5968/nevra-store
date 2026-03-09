@@ -37,6 +37,40 @@ app.post('/api/products', async (req, response) => {
     await newProduct.save();
     response.json({ message: "Product saved to Cloud!" });
 });
+// --- USER SCHEMA (Naya!) ---
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
+});
+const User = mongoose.model('User', userSchema);
+
+// --- AUTH ROUTES ---
+
+// 1. Signup Route
+app.post('/api/signup', async (req, response) => {
+    try {
+        const newUser = new User(req.body);
+        await newUser.save();
+        response.json({ message: "Account Created Successfully!" });
+    } catch (err) {
+        response.status(400).json({ error: "Email or Username already exists!" });
+    }
+});
+
+// 2. Login Route
+app.post('/api/login', async (req, response) => {
+    try {
+        const user = await User.findOne({ email: req.body.email, password: req.body.password });
+        if (user) {
+            response.json({ message: "Login Successful!", user: user.username });
+        } else {
+            response.status(401).json({ error: "Invalid Credentials!" });
+        }
+    } catch (err) {
+        response.status(500).json({ error: err.message });
+    }
+});
 
 app.listen(PORT, () => {
     console.log("Server running on port 3000");
