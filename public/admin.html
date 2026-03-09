@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nevra Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* A little extra styling just for our secret office */
+        .admin-container {
+            max-width: 500px;
+            margin: 100px auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #ff007f;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #222;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">NEVRA ADMIN</div>
+        <div class="nav-links">
+            <a href="/">View Live Store</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <h2>Add New Product</h2>
+        <p style="color: #aaa; margin-bottom: 20px;">Upload new clothing to the warehouse directly.</p>
+        
+        <input type="text" id="productName" placeholder="Product Name (e.g., Cyber Jacket)">
+        <input type="text" id="productPrice" placeholder="Price (e.g., Rs. 5,000)">
+        <input type="text" id="productImage" placeholder="Image Link (URL)">
+        
+        <button class="glow-button" id="addButton" style="margin-top: 20px;">Upload to Store</button>
+    </div>
+<script>
+        // 1. Find the upload button
+        const addButton = document.getElementById('addButton');
+
+        // 2. Tell the button what to do when clicked
+        addButton.addEventListener('click', function() {
+            
+            // Grab the exact words the owner typed into the boxes
+            const newName = document.getElementById('productName').value;
+            const newPrice = document.getElementById('productPrice').value;
+            const newImage = document.getElementById('productImage').value;
+
+            // Pack the details into a neat digital box
+            const newClothingItem = {
+                name: newName,
+                price: newPrice,
+                image: newImage
+            };
+
+            // Call the delivery truck (Fetch) and POST it to the server!
+            fetch('/api/products', {
+                method: 'POST', // We are SENDING data, not getting it
+                headers: {
+                    'Content-Type': 'application/json' // Telling the server it's JSON format
+                },
+                body: JSON.stringify(newClothingItem) // Putting our box on the truck
+            })
+            .then(function() {
+                // When the server says "Received!", show a pop-up and clear the boxes
+                alert("Boom! New product added to the Nevra Store.");
+                document.getElementById('productName').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productImage').value = '';
+            });
+
+        });
+    </script>
+</body>
+</html>
