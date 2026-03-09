@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nevra | Your Cart</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cart-container { padding: 50px 10%; }
+        .cart-item { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 20px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #222; }
+        .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 5px; }
+        .checkout-box { background: #111; padding: 30px; border-radius: 10px; border: 1px solid #ff0055; text-align: right; }
+        .remove-btn { color: #ff4444; cursor: pointer; background: none; border: none; }
+    </style>
+</head>
+<body>
+    <header><h1 class="logo">NEVRA<span>.</span></h1></header>
+
+    <div class="cart-container">
+        <h2 style="margin-bottom: 30px;">SHOPPING CART</h2>
+        <div id="cart-items-list">
+            </div>
+
+        <div class="checkout-box" id="checkout-section" style="display:none;">
+            <h3>Total: <span id="cart-total">Rs. 0</span></h3>
+            <button class="shop-now" onclick="proceedToCheckout()" style="width: 250px;">PROCEED TO CHECKOUT</button>
+        </div>
+    </div>
+
+    <script>
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('nevra_cart')) || [];
+            const list = document.getElementById('cart-items-list');
+            const checkoutBox = document.getElementById('checkout-section');
+            let total = 0;
+
+            if(cart.length === 0) {
+                list.innerHTML = "<h3>Your cart is empty.</h3><a href='index.html' style='color:#ff0055;'>Go Shopping</a>";
+                checkoutBox.style.display = 'none';
+                return;
+            }
+
+            checkoutBox.style.display = 'block';
+            list.innerHTML = '';
+            cart.forEach((item, index) => {
+                const priceNum = parseInt(item.price.replace(/\D/g,''));
+                total += priceNum * item.quantity;
+                
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.image}">
+                        <div style="flex:1; margin-left: 20px;">
+                            <h4>${item.name}</h4>
+                            <p>${item.price} x ${item.quantity}</p>
+                        </div>
+                        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            document.getElementById('cart-total').innerText = "Rs. " + total;
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('nevra_cart'));
+            cart.splice(index, 1);
+            localStorage.setItem('nevra_cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function proceedToCheckout() {
+            window.location.href = "checkout.html";
+        }
+
+        loadCart();
+    </script>
+</body>
+</html>

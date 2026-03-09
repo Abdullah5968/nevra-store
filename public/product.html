@@ -47,6 +47,22 @@
             }
         }
         loadProductDetails();
+        // Cart function
+function addToCart(id, name, price, image) {
+    let cart = JSON.parse(localStorage.getItem('nevra_cart')) || [];
+    
+    // Check agar item pehle se cart mein hai
+    const existingItem = cart.find(item => item.id === id);
+    if(existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ id, name, price, image, quantity: 1 });
+    }
+    
+    localStorage.setItem('nevra_cart', JSON.stringify(cart));
+    alert(name + " added to cart!");
+    window.location.href = 'index.html'; // Wapas home par le jao
+}
     </script>
 </body>
 </html>
