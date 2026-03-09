@@ -1,220 +1,41 @@
-/* This star means "apply to everything" to clean up messy spaces */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; background: #0a0a0a; color: white; }
 
-/* Our dark futuristic background */
-body {
-    background-color: #050505; 
-    color: white;
-    font-family: Arial, sans-serif; /* Makes the font look clean and modern */
-}
+/* Header & Nav */
+header { background: #000; padding: 15px 5%; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 100; }
+.nav-container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-weight: 700; font-size: 24px; color: #fff; }
+.logo span { color: #ff0055; }
+nav a { color: #ccc; text-decoration: none; margin-left: 20px; font-size: 14px; transition: 0.3s; }
+nav a:hover { color: #ff0055; }
+.auth-btn { border: 1px solid #ff0055; padding: 5px 15px; border-radius: 20px; }
 
-/* The Magic Flexbox for our menu! */
-.navbar {
-    display: flex; 
-    justify-content: space-between; /* Pushes Logo to the left, Links to the right */
-    padding: 20px 50px; /* Adds breathing room inside the menu */
-    background-color: rgba(255, 255, 255, 0.05); /* Gives a slight glass/see-through effect */
+/* Banner */
+.banner { 
+    height: 70vh; 
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200');
+    background-size: cover; background-position: center;
+    display: flex; align-items: center; justify-content: center; text-align: center;
 }
+.banner h2 { font-size: 50px; letter-spacing: 5px; margin-bottom: 10px; }
+.shop-now { background: #ff0055; color: white; border: none; padding: 12px 30px; cursor: pointer; font-weight: 600; margin-top: 20px; }
 
-/* Making the Nevra logo pop */
-.logo {
-    color: #ff007f; /* Neon Pink! */
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 2px; /* Spaces out the letters to look premium */
-}
+/* Grid Layout */
+.section-title { text-align: center; margin-top: 50px; font-size: 30px; letter-spacing: 2px; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 50px 5%; }
 
-/* Fixing the ugly blue links */
-.nav-links a {
-    color: white;
-    text-decoration: none; /* This deletes the underline */
-    margin-left: 20px; /* Puts space between Home, Shop, and Cart */
-    font-size: 16px;
-}
-/* The Billboard (Hero) Background and Centering */
-.hero {
-    height: 80vh; /* Makes it take up 80% of your screen height */
-    display: flex;
-    justify-content: center; /* Centers everything left-to-right */
-    align-items: center; /* Centers everything top-to-bottom */
-    text-align: center;
-    background: radial-gradient(circle, #1a001a 0%, #050505 100%); /* Adds a secret dark purple glow in the middle! */
-    padding: 20px; /* Safe space for mobile screens */
-}
+/* Professional Product Card */
+.product-card { background: #111; border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: 0.3s; position: relative; }
+.product-card:hover { transform: translateY(-10px); border-color: #ff0055; }
+.product-card img { width: 100%; height: 350px; object-fit: cover; } /* Pic fitting fix */
+.product-info { padding: 20px; text-align: center; }
+.product-info h3 { font-size: 18px; margin-bottom: 10px; font-weight: 400; }
+.price { color: #ff0055; font-weight: 700; font-size: 20px; display: block; margin-bottom: 15px; }
+.btn-buy { background: transparent; border: 1px solid #ff0055; color: white; padding: 10px 25px; cursor: pointer; transition: 0.3s; width: 100%; }
+.btn-buy:hover { background: #ff0055; }
 
-/* Making the Main Text Huge */
-.hero-content h1 {
-    font-size: 50px; /* Massive text! */
-    margin-bottom: 15px;
-    text-transform: uppercase; /* FORCES ALL CAPS */
-    letter-spacing: 3px;
-}
-
-/* Styling the Subtitle */
-.hero-content p {
-    font-size: 18px;
-    color: #cccccc; /* Light grey so it's easy to read */
-    margin-bottom: 30px;
-}
-
-/* The Futuristic Glow Button */
-.glow-button {
-    padding: 15px 40px;
-    font-size: 16px;
-    color: white;
-    background-color: transparent; /* See-through background */
-    border: 2px solid #ff007f; /* Neon pink border */
-    border-radius: 30px; /* Rounded corners */
-    cursor: pointer; /* Makes the mouse look like a clicking finger */
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: 0.3s; /* Makes the animation smooth */
-}
-
-/* What happens when the mouse touches the button! */
-.glow-button:hover {
-    background-color: #ff007f;
-    box-shadow: 0 0 20px #ff007f; /* The glowing magic! */
-    color: white;
-}
-/* --- PRODUCTS SECTION --- */
-.products-section {
-    padding: 60px 20px; /* Adds space around the section */
-    text-align: center;
-}
-
-.section-title {
-    font-size: 36px;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* The Magic Grid for Mobile Phones! */
-.product-grid {
-    display: grid;
-    /* This next line is the magic that makes it mobile-friendly automatically! */
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-    gap: 30px; /* Space between the cards */
-    max-width: 1200px; /* Keeps it neat on giant screens */
-    margin: 0 auto; /* Centers the whole grid perfectly */
-}
-
-/* The Futuristic Glass Card */
-.product-card {
-    background-color: rgba(255, 255, 255, 0.05); /* Slight see-through glass effect */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Faint white border */
-    border-radius: 15px; /* Smooth rounded corners */
-    padding: 15px;
-    transition: 0.4s; /* Makes our hover animation smooth */
-}
-
-/* Fixing the Giant Pictures! */
-.product-card img {
-    width: 100%; /* Forces the picture to stay inside the card */
-    height: 350px; /* Makes every picture the exact same height */
-    object-fit: cover; /* Crops the picture nicely without squishing it */
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
-
-.product-card h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-/* The Price Tag */
-.price {
-    color: #ff007f; /* Neon pink price! */
-    font-size: 18px;
-    font-weight: bold;
-}
-
-/* Futuristic Hover Effect! */
-.product-card:hover {
-    transform: translateY(-10px); /* Makes the card float UP when you touch it */
-    box-shadow: 0 10px 20px rgba(255, 0, 127, 0.3); /* Adds a pink glowing shadow underneath */
-    border-color: #ff007f; /* Turns the border pink */
-}
-/* --- THE MOVING HYPE BANNER --- */
-.scrolling-banner {
-    width: 100%; /* Stretches all the way across the screen */
-    background-color: #ff007f; /* Neon pink background! */
-    padding: 12px 0; /* Space above and below the text */
-    overflow: hidden; /* SUPER IMPORTANT: This hides the text when it goes off the edge of the screen */
-    border-top: 2px solid white;
-    border-bottom: 2px solid white;
-}
-
-.scrolling-text {
-    display: flex;
-    white-space: nowrap; /* Forces the text to stay in one long, straight line */
-    width: 200%; /* Makes the box twice as wide so the text can slide */
-    animation: moveText 15s linear infinite; /* The magic engine! 15 seconds, smooth speed, never stops */
-}
-
-.scrolling-text span {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    letter-spacing: 2px;
-    width: 50%; /* Each sentence takes up half the space */
-}
-
-/* The Movie Director (Animation Rules) */
-@keyframes moveText {
-    0% { transform: translateX(0); } /* Start exactly here */
-    100% { transform: translateX(-50%); } /* Slide perfectly to the left */
-}
-/* --- THE FOOTER (The Shoes) --- */
-.footer {
-    background-color: #020202; /* Slightly darker than the rest of the site */
-    padding: 50px 20px;
-    text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Adds a faint line above the footer */
-    margin-top: 50px; /* Pushes the footer down away from the products */
-}
-
-.footer-logo {
-    color: #ff007f; /* Neon pink logo again to match the top */
-    font-size: 28px;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
-}
-
-.footer p {
-    color: #888888; /* Dark grey so it's easy on the eyes */
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-/* Flexbox magic to put the links side-by-side! */
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 30px; /* Puts perfect space between Instagram, TikTok, etc. */
-    margin-bottom: 30px;
-}
-
-.footer-links a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: 0.3s;
-}
-
-/* Hover magic for the footer links */
-.footer-links a:hover {
-    color: #ff007f;
-}
-
-.copyright {
-    font-size: 12px;
-    color: #444444; /* Very dark grey for the copyright text */
-}
+/* Footer */
+footer { background: #000; padding: 50px 5%; border-top: 1px solid #222; margin-top: 100px; text-align: center; }
+.footer-content { display: flex; justify-content: space-around; flex-wrap: wrap; margin-bottom: 30px; }
+.footer-section { margin: 20px; }
+.copyright { color: #666; font-size: 12px; }

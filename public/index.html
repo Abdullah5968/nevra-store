@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Nevra Store | Official</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">NEVRA</div>
-        <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Shop</a>
-            <a href="#">Cart</a>
-        </div>
-    </nav>
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Redefine Your Aura</h1>
-            <p>The future of women's fashion in Pakistan.</p>
-            <button class="glow-button">Explore Collection</button>
+
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">NEVRA<span>.</span></h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="#">Shop</a>
+                <a href="/login.html" class="auth-btn">Login</a>
+                <a href="/signup.html" class="auth-btn">Sign Up</a>
+                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+            </nav>
         </div>
     </header>
-    <div class="scrolling-banner">
-        <div class="scrolling-text">
-            <span>⚡ FREE SHIPPING IN PAKISTAN ⚡ THE FUTURE OF FASHION ⚡ EXCLUSIVE NEVRA DROP ⚡ HIGH-TECH APPAREL ⚡</span>
-            <span>⚡ FREE SHIPPING IN PAKISTAN ⚡ THE FUTURE OF FASHION ⚡ EXCLUSIVE NEVRA DROP ⚡ HIGH-TECH APPAREL ⚡</span>
-        </div>
-    </div>
-    <section class="products-section">
-        <h2 class="section-title">New Arrivals</h2>
-        
-        <div class="product-grid" id="shop-container">
 
+    <section class="banner">
+        <div class="banner-content">
+            <h2>SUMMER COLLECTION 2026</h2>
+            <p>Elevate your style with Nevra's exclusive drops.</p>
+            <button class="shop-now">SHOP NOW</button>
         </div>
     </section>
-    <footer class="footer">
-        <div class="footer-content">
-            <h2 class="footer-logo">NEVRA</h2>
-            <p>Designed in Pakistan. Built for the Future.</p>
-            <div class="footer-links">
-                <a href="#">Instagram</a>
-                <a href="#">TikTok</a>
-                <a href="#">Return Policy</a>
-                <a href="#">Contact Us</a>
+
+    <main>
+        <h2 class="section-title">NEW ARRIVALS</h2>
+        <div id="product-list" class="product-grid">
             </div>
-            <p class="copyright">© 2026 Nevra Clothing. All rights reserved.</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>NEVRA STORE</h3>
+                <p>Modern streetwear for the bold.</p>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACT US</h3>
+                <p>WhatsApp: +92 3XX XXXXXXX</p>
+                <p>Email: support@nevrastore.com</p>
+            </div>
         </div>
+        <p class="copyright">&copy; 2026 Nevra Store. All Rights Reserved.</p>
     </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
