@@ -2,85 +2,90 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Nevra Admin Dashboard</title>
+    <title>Nevra Admin | Manage Store</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* A little extra styling just for our secret office */
-        .admin-container {
-            max-width: 500px;
-            margin: 100px auto;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #ff007f;
-            text-align: center;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background: #222;
-            color: white;
-            border: 1px solid #555;
-            border-radius: 5px;
-        }
+        .admin-container { padding: 50px 10%; }
+        .form-box { background: #111; padding: 30px; border-radius: 10px; border: 1px solid #ff0055; margin-bottom: 50px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; }
+        .manage-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .manage-table th, .manage-table td { padding: 15px; text-align: left; border-bottom: 1px solid #222; }
+        .btn-delete { background: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+        .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
     </style>
 </head>
 <body>
-
-    <nav class="navbar">
-        <div class="logo">NEVRA ADMIN</div>
-        <div class="nav-links">
-            <a href="/">View Live Store</a>
-        </div>
-    </nav>
+    <header><h1>NEVRA ADMIN PANEL</h1></header>
 
     <div class="admin-container">
-        <h2>Add New Product</h2>
-        <p style="color: #aaa; margin-bottom: 20px;">Upload new clothing to the warehouse directly.</p>
-        
-        <input type="text" id="productName" placeholder="Product Name (e.g., Cyber Jacket)">
-        <input type="text" id="productPrice" placeholder="Price (e.g., Rs. 5,000)">
-        <input type="text" id="productImage" placeholder="Image Link (URL)">
-        
-        <button class="glow-button" id="addButton" style="margin-top: 20px;">Upload to Store</button>
+        <div class="form-box">
+            <h3>Add New Product</h3>
+            <input type="text" id="pName" placeholder="Product Name">
+            <input type="text" id="pPrice" placeholder="Price (e.g. Rs. 5000)">
+            <input type="text" id="pImage" placeholder="Image Direct Link (URL)">
+            <button onclick="addProduct()" class="shop-now">Upload to Store</button>
+        </div>
+
+        <div class="form-box">
+            <h3>Manage Existing Products</h3>
+            <table class="manage-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-product-list">
+                    </tbody>
+            </table>
+        </div>
     </div>
-<script>
-        // 1. Find the upload button
-        const addButton = document.getElementById('addButton');
 
-        // 2. Tell the button what to do when clicked
-        addButton.addEventListener('click', function() {
+    <script>
+        // Load products to manage
+        async function loadAdminProducts() {
+            const res = await fetch('/api/products');
+            const products = await res.json();
+            const list = document.getElementById('admin-product-list');
+            list.innerHTML = '';
             
-            // Grab the exact words the owner typed into the boxes
-            const newName = document.getElementById('productName').value;
-            const newPrice = document.getElementById('productPrice').value;
-            const newImage = document.getElementById('productImage').value;
-
-            // Pack the details into a neat digital box
-            const newClothingItem = {
-                name: newName,
-                price: newPrice,
-                image: newImage
-            };
-
-            // Call the delivery truck (Fetch) and POST it to the server!
-            fetch('/api/products', {
-                method: 'POST', // We are SENDING data, not getting it
-                headers: {
-                    'Content-Type': 'application/json' // Telling the server it's JSON format
-                },
-                body: JSON.stringify(newClothingItem) // Putting our box on the truck
-            })
-            .then(function() {
-                // When the server says "Received!", show a pop-up and clear the boxes
-                alert("Boom! New product added to the Nevra Store.");
-                document.getElementById('productName').value = '';
-                document.getElementById('productPrice').value = '';
-                document.getElementById('productImage').value = '';
+            products.forEach(p => {
+                list.innerHTML += `
+                    <tr>
+                        <td><img src="${p.image}" class="img-preview"></td>
+                        <td>${p.name}</td>
+                        <td>${p.price}</td>
+                        <td><button class="btn-delete" onclick="deleteProduct('${p._id}')">Delete</button></td>
+                    </tr>
+                `;
             });
+        }
 
-        });
+        async function addProduct() {
+            const product = {
+                name: document.getElementById('pName').value,
+                price: document.getElementById('pPrice').value,
+                image: document.getElementById('pImage').value
+            };
+            await fetch('/api/products', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(product)
+            });
+            alert("Product Added!");
+            loadAdminProducts(); // Refresh table
+        }
+
+        async function deleteProduct(id) {
+            if(confirm("Are you sure you want to delete this?")) {
+                await fetch(`/api/products/${id}`, { method: 'DELETE' });
+                loadAdminProducts(); // Refresh table
+            }
+        }
+
+        loadAdminProducts();
     </script>
 </body>
 </html>
